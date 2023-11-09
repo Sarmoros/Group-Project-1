@@ -1,0 +1,54 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+h1 {
+    background-color: #3498db;
+    color: white;
+    padding: 10px;
+}
+
+form {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 50%;
+    margin: 0 auto;
+}
+
+label, input {
+    display: block;
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+#event-list {
+    margin-top: 20px;
+}
+
+.event-card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+}
+
+#event-details {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 50%;
+    margin: 0 auto;
+    background-color: #f0f0f0;
+}
+
+.hidden {
+    display: none;
+}
