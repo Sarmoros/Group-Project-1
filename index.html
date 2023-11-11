@@ -3,38 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/style.css">
-    <title>Hanganxiety</title>
+    <title>Weather & Event Recommender</title>
 </head>
 <body>
-    <h1>Welcome to Hanganxiety</h1>
-    
-    <form id="event-form">
-        <h2>Create a New Event</h2>
-        <label for="event-name">Event Name:</label>
-        <input type="text" id="event-name" required>
-        <label for="event-date">Date:</label>
-        <input type="date" id="event-date" required>
-        <label for="event-time">Time:</label>
-        <input type="time" id="event-time" required>
-        <label for="event-password">Event Password:</label>
-        <input type="password" id="event-password" required>
-        <button type="submit">Create Event</button>
-    </form>
-
-    <div id="event-list">
-        <h2>Upcoming Events</h2>
+    <h1>Weather & Event Recommender</h1>
+    <div id="weather-form">
+        <label for="location">Enter a Location:</label>
+        <input type="text" id="location" placeholder="City, Country">
+        <button id="get-weather">Get Weather</button>
     </div>
-
-    <div id="event-details" class="hidden">
-        <h2>Event Details</h2>
-        <p id="event-info"></p>
-        <label for="event-password-input">Enter Event Password:</label>
-        <input type="password" id="event-password-input">
-        <button id="join-event">Join Event</button>
-        <button id="cancel-event">Cancel Event</button>
+    <div id="weather-info">
+        <h2>Weather Information</h2>
+        <div id="weather-data">
+            <!-- Weather data will be displayed here -->
+        </div>
     </div>
-
+    <div id="event-recommendation">
+        <h2>Event Recommendation</h2>
+        <p id="event-recommendation-text">Recommendation will appear here</p>
+    </div>
     <script src="assets/script.js"></script>
 </body>
 </html>

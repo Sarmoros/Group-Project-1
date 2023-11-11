@@ -1,66 +1,80 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const eventForm = document.getElementById("event-form");
-    const eventList = document.getElementById("event-list");
-    const eventDetails = document.getElementById("event-details");
-    const eventInfo = document.getElementById("event-info");
-    const eventPasswordInput = document.getElementById("event-password-input");
-    const joinEventButton = document.getElementById("join-event");
-    const cancelEventButton = document.getElementById("cancel-event");
+    const locationInput = document.getElementById("location");
+    const getWeatherButton = document.getElementById("get-weather");
+    const weatherData = document.getElementById("weather-data");
+    const eventRecommendationText = document.getElementById("event-recommendation-text");
 
-    eventForm.addEventListener("submit", function (e) {
-        e.preventDefault();
+    getWeatherButton.addEventListener("click", function () {
+        const location = locationInput.value;
 
-        // Get event details from the form
-        const eventName = document.getElementById("event-name").value;
-        const eventDate = document.getElementById("event-date").value;
-        const eventTime = document.getElementById("event-time").value;
-        const eventPassword = document.getElementById("event-password").value;
+        const apiKey = '4e6e807ee59834126e8fdbcfad716167'; // Replace with your OpenWeatherMap API key
+        const weatherApiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`;
 
-        // Create an event card and add it to the event list
-        const eventCard = document.createElement("div");
-        eventCard.classList.add("event-card");
-        eventCard.innerHTML = `
-            <h3>${eventName}</h3>
-            <p>Date: ${eventDate}</p>
-            <p>Time: ${eventTime}</p>
-            <button class="join-event">Join Event</button>
-        `;
-        eventCard.setAttribute("data-password", eventPassword); // Store the password as a data attribute
-        eventList.appendChild(eventCard);
+        // Fetch weather data from OpenWeatherMap
+        fetch(weatherApiUrl)
+            .then(response => response.json())
+            .then(weatherData => {
+                if (weatherData.cod === 200) {
+                    const { name, main, weather } = weatherData;
+                    const { temp, humidity } = main;
+                    const { description } = weather[0];
 
-        // Clear the form
-        eventForm.reset();
+                    // Display weather information
+                    weatherData.innerHTML = `
+                        <p>Location: ${name}</p>
+                        <p>Temperature: ${temp}°C</p>
+                        <p>Humidity: ${humidity}%</p>
+                        <p>Weather: ${description}</p>
+                    `;
+
+                    // Generate event recommendations based on weather and location
+                    generateEventRecommendations(location, description);
+                } else {
+                    weatherData.innerHTML = "Location not found";
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
     });
 
-    // Event Listeners for Joining an Event
-    eventList.addEventListener("click", function (e) {
-        if (e.target.classList.contains("join-event")) {
-            // Show the event details section
-            eventDetails.classList.remove("hidden");
-            eventInfo.textContent = e.target.parentElement.textContent;
-        }
-    });
+    function generateEventRecommendations(location, weatherDescription) {
+        // Create a request to ChatGPT for event recommendations
+        const chatGptApiUrl = 'https://api.openai.com/v1/engines/davinci/completions';
 
-    joinEventButton.addEventListener("click", function () {
-        const selectedEvent = document.querySelector(".event-card.selected");
-        const enteredPassword = eventPasswordInput.value;
+        // Use a specific prompt for event recommendations based on location and weather
+        const prompt = `Suggest outdoor events in ${location} based on the weather "${weatherDescription}".`;
 
-        if (selectedEvent && enteredPassword) {
-            const eventPassword = selectedEvent.getAttribute("data-password");
+        const requestBody = {
+            prompt,
+            max_tokens: 100,
+        };
 
-            if (enteredPassword === eventPassword) {
-                alert("Event joined successfully!");
-                eventDetails.classList.add("hidden");
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer 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', // Replace with your ChatGPT API key
+        };
+
+        // Make a POST request to ChatGPT API
+        fetch(chatGptApiUrl, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(requestBody),
+        })
+        .then(response => {
+            if (response.status === 200) {
+                return response.json();
             } else {
-                alert("Incorrect password. Please try again.");
+                throw new Error('ChatGPT API request failed');
             }
-        } else {
-            alert("Select an event and enter the password.");
-        }
-    });
-
-    cancelEventButton.addEventListener("click", function () {
-        // Hide the event details section
-        eventDetails.classList.add("hidden");
-    });
+        })
+        .then(responseData => {
+            // Display the event recommendation from ChatGPT
+            const recommendation = responseData.choices[0].text;
+            eventRecommendationText.textContent = recommendation;
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
 });
