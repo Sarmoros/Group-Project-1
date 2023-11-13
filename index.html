@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather & Event Recommender</title>
+    <link rel="stylesheet" href="styles.css">
+    <title>Weather & Image Comparison Tool</title>
 </head>
 <body>
-    <h1>Weather & Event Recommender</h1>
+    <h1>Weather & Image Comparison Tool</h1>
     <div id="weather-form">
-        <label for="location">Enter a Location:</label>
-        <input type="text" id="location" placeholder="City, Country">
-        <button id="get-weather">Get Weather</button>
+        <label for="locations">Enter Locations (comma-separated):</label>
+        <input type="text" id="locations" placeholder="City1, Country1, City2, Country2, ...">
+        <button id="compare-weather">Compare Weather</button>
     </div>
     <div id="weather-info">
         <h2>Weather Information</h2>
@@ -18,10 +19,29 @@
             <!-- Weather data will be displayed here -->
         </div>
     </div>
-    <div id="event-recommendation">
-        <h2>Event Recommendation</h2>
-        <p id="event-recommendation-text">Recommendation will appear here</p>
+    <div id="image-container">
+        <h2>Location Images</h2>
+        <div style="max-width: 10px;" id="images">
+            <!-- Images will be displayed here -->
+        </div>
     </div>
+    <div id="map-container">
+        <h2>Event Locations</h2>
+        <div id="map"></div>
+    </div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzWZEjXyi8Y0vwCV6bI5kGD5BAazK5ia0&libraries=places&callback=initMap" async defer></script>
     <script src="assets/script.js"></script>
+
+    <style>
+        #map-container {
+    margin-top: 20px;
+    }
+
+    #map {
+    width: 100%;
+    height: 400px; /* Adjust the height as needed */
+    border: 1px solid #ccc;
+    }
+    </style>
 </body>
 </html>
