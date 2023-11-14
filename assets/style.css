@@ -3,7 +3,7 @@ body {
     text-align: center;
 }
 
-h1 {
+header {
     background-color: #3498db;
     color: white;
     padding: 10px;
@@ -64,4 +64,4 @@ button {
     display: none;
 }
 
-    
+   
