@@ -27,8 +27,7 @@
 .left-banner,
 .right-banner {
     width: 10%;
-    height: 100vh;
-    background-color: blue;
+    height: 50vh
 }
 
 /* Custom style for the data columns */
