@@ -1,104 +1,163 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const locationsInput = document.getElementById("locations");
-    const compareWeatherButton = document.getElementById("compare-weather");
-    const weatherData = document.getElementById("weather-data");
-    const imageContainer = document.getElementById("images");
+    const compareForm = document.getElementById("compareForm");
+    const city1Data = document.getElementById("city1Data");
+    const city2Data = document.getElementById("city2Data");
     let map;
 
-    compareWeatherButton.addEventListener("click", function () {
-        const locations = locationsInput.value.split(",").map(location => location.trim());
+    compareForm.addEventListener("submit", function (event) {
+        event.preventDefault();
 
-        if (locations.length < 2) {
-            alert("Please enter at least two locations for comparison.");
+        const search1 = document.getElementById("search1").value.trim();
+        const search2 = document.getElementById("search2").value.trim();
+
+        if (!search1 || !search2) {
+            alert("Please enter both cities to compare.");
             return;
         }
 
-        if (locations.length >= 4) {
-            alert("Please enter 3 locations or less.");
-            return;
-        }
+        // Fetch and display data for City 1 (OpenWeatherMap API)
+        fetchCityData(search1, city1Data);
 
-        // Clear previous data
-        weatherData.innerHTML = "";
-        imageContainer.innerHTML = "";
+        // Fetch and display data for City 2 (OpenWeatherMap API)
+        fetchCityData(search2, city2Data);
 
-        // Fetch weather data and images for each location
-        locations.forEach(location => {
-            const openWeatherMapApiKey = '4e6e807ee59834126e8fdbcfad716167';
-            const unsplashAccessKey = '2lV0OAt5aYO0BI3SaBX7whHE3sBxKNPAwXB1_3jdHbg'; // Replace with your actual Unsplash access key
-            const openWeatherMapUrl = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${openWeatherMapApiKey}&units=metric`;
-            const unsplashUrl = `https://api.unsplash.com/photos/random?query=${location}&client_id=${unsplashAccessKey}`;
+        // Initialize or update the map (Google Maps API)
+        updateMap(search1, search2);
 
-            // Fetch weather data
-            fetch(openWeatherMapUrl)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.cod === 200) {
-                        const { name, main, weather } = data;
-                        const { temp, humidity } = main;
-                        const { description } = weather[0];
-
-                        // Display weather data
-                        weatherData.innerHTML += `
-                            <div>
-                                <h3>${name}</h3>
-                                <p>Temperature: ${temp}°C</p>
-                                <p>Humidity: ${humidity}%</p>
-                                <p>Weather: ${description}</p>
-                            </div>
-                        `;
-
-                        // Display the map for the event location
-                        showMap(data.coord.lat, data.coord.lon, name);
-                    } else {
-                        weatherData.innerHTML += `<p>${location}: Location not found</p>`;
-                    }
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-
-            // Fetch images from Unsplash
-            fetch(unsplashUrl)
-                .then(response => response.json())
-                .then(imageData => {
-                    const imageUrl = imageData.urls.regular;
-
-                    // Display image
-                    imageContainer.innerHTML += `
-                        <div>
-                            <h3>${location}</h3>
-                            <img src="${imageUrl}" alt="${location}">
-                        </div>
-                    `;
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        });
+        // Fetch and display images for City 1 and City 2 (Unsplash API)
+        fetchUnsplashImage(search1, "left-banner");
+        fetchUnsplashImage(search2, "right-banner");
     });
 
-    // Function to initialize the map
-    function initMap() {
-        map = new google.maps.Map(document.getElementById("map"), {
-            center: { lat: 0, lng: 0 },
-            zoom: 2
+    function fetchCityData(city, displayElement) {
+        const openWeatherMapApiKey = '4e6e807ee59834126e8fdbcfad716167';
+        const openWeatherMapUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${openWeatherMapApiKey}&units=metric`;
+
+        fetch(openWeatherMapUrl)
+            .then(response => response.json())
+            .then(data => {
+                if (data.cod === 200) {
+                    const { name, main, weather } = data;
+                    const { temp, humidity } = main;
+                    const { description } = weather[0];
+
+                    // Display city data
+                    displayCityData(displayElement, name, temp, humidity, description);
+                } else {
+                    displayCityData(displayElement, "City not found", "-", "-", "-");
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                displayCityData(displayElement, "Error", "-", "-", "-");
+            });
+    }
+
+    function displayCityData(element, cityName, temp, humidity, weather) {
+        element.innerHTML = `
+            <p>${cityName}</p>
+            <p>Temp: ${temp}°C</p>
+            <p>Humidity: ${humidity}%</p>
+            <p>Weather: ${weather}</p>
+        `;
+    }
+
+    function updateMap(city1, city2) {
+        const mapElement = document.querySelector(".map");
+    
+        // Clear the map container
+        mapElement.innerHTML = "";
+    
+        // Create a new map container
+        const mapContainer = document.createElement("div");
+        mapContainer.style.height = "400px"; // Adjust the height as needed
+        mapContainer.style.width = "100%";
+        mapElement.appendChild(mapContainer);
+    
+        // Initialize the map
+        map = new google.maps.Map(mapContainer);
+    
+        // Create LatLngBounds object
+        const bounds = new google.maps.LatLngBounds();
+    
+        // Geocode City 1
+        geocodeCity(city1, function (result1) {
+            if (result1) {
+                const marker1 = new google.maps.Marker({
+                    position: result1.geometry.location,
+                    map: map,
+                    title: city1,
+                });
+    
+                // Extend bounds to include City 1
+                bounds.extend(marker1.getPosition());
+            }
+        });
+    
+        // Geocode City 2
+        geocodeCity(city2, function (result2) {
+            if (result2) {
+                const marker2 = new google.maps.Marker({
+                    position: result2.geometry.location,
+                    map: map,
+                    title: city2,
+                });
+    
+                // Extend bounds to include City 2
+                bounds.extend(marker2.getPosition());
+            }
+    
+            // Fit the map to the bounds
+            map.fitBounds(bounds);
+    
+            // Center the map if there's only one marker
+            if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
+                const center = bounds.getCenter();
+                map.setCenter(center);
+                map.setZoom(12); 
+            }
+        });
+    }
+    
+    
+    
+    
+
+    function geocodeCity(city, callback) {
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ address: city }, function (results, status) {
+            if (status === google.maps.GeocoderStatus.OK && results.length > 0) {
+                const result = results[0];
+                callback(result);
+            } else {
+                console.error(`Geocoding error for ${city}: ${status}`);
+                callback(null);
+            }
         });
     }
 
-    // Function to show the map for the event location
-    function showMap(latitude, longitude, locationName) {
-        const eventLocation = new google.maps.LatLng(latitude, longitude);
-        map.setCenter(eventLocation);
-        map.setZoom(2); // You can adjust the zoom level as needed
-
-        const marker = new google.maps.Marker({
-            position: eventLocation,
-            map: map,
-            title: locationName
-        });
+    function fetchUnsplashImage(city, bannerClass) {
+        const unsplashAccessKey = '2lV0OAt5aYO0BI3SaBX7whHE3sBxKNPAwXB1_3jdHbg';
+        const unsplashUrl = `https://api.unsplash.com/photos/random?query=${city}&client_id=${unsplashAccessKey}`;
+    
+        fetch(unsplashUrl)
+            .then(response => response.json())
+            .then(imageData => {
+                const imageUrl = imageData.urls.regular;
+    
+                // Display image with fixed dimensions
+                const bannerElement = document.querySelector(`.${bannerClass} .splashImage`);
+                bannerElement.src = imageUrl;
+                bannerElement.alt = city;
+            })
+            .catch(error => {
+                console.error(error);
+                const bannerElement = document.querySelector(`.${bannerClass} .splashImage`);
+                bannerElement.src = "https://via.placeholder.com/150";
+                bannerElement.alt = city;
+            });
     }
-
-    // Ensure that the map is initialized after the Google Maps API is fully loaded
-    google.maps.event.addDomListener(window, 'load', initMap);
+    
+    
+    
 });
