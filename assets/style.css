@@ -8,6 +8,11 @@ p {
     font-size: large;
 }
 
+img {
+    width: 250px;
+    height: 60px;
+}
+
 /*
 .input-style {
     border: 1px solid #7f7f7f !important;
