@@ -73,7 +73,6 @@ document.addEventListener("DOMContentLoaded", function () {
         // Set the display property to block to show the map
         mapElement.style.display = "block";
         resultWrapper.style.display = "block";
-
     
         // Clear the map container
         mapElement.innerHTML = "";
@@ -81,8 +80,91 @@ document.addEventListener("DOMContentLoaded", function () {
         // Set a specific height for the map container
         mapElement.style.height = "300px"; // Adjust the height as needed
     
-        // Initialize a new map
-        map = new google.maps.Map(mapElement);
+        // Initialize a new map with night mode style
+        map = new google.maps.Map(mapElement, {
+            center: { lat: 40.674, lng: -73.945 }, // Default center, adjust as needed
+            zoom: 12, // Default zoom, adjust as needed
+            styles: [
+                { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
+                { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
+                { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
+                {
+                    featureType: "administrative.locality",
+                    elementType: "labels.text.fill",
+                    stylers: [{ color: "#d59563" }],
+                },
+                {
+                    featureType: "poi",
+                    elementType: "labels.text.fill",
+                    stylers: [{ color: "#d59563" }],
+                },
+                {
+                    featureType: "poi.park",
+                    elementType: "geometry",
+                    stylers: [{ color: "#263c3f" }],
+                },
+                {
+                    featureType: "poi.park",
+                    elementType: "labels.text.fill",
+                    stylers: [{ color: "#6b9a76" }],
+                },
+                {
+                    featureType: "road",
+                    elementType: "geometry",
+                    stylers: [{ color: "#38414e" }],
+                },
+                {
+                    featureType: "road",
+                    elementType: "geometry.stroke",
+                    stylers: [{ color: "#212a37" }],
+                },
+                {
+                    featureType: "road",
+                    elementType: "labels.text.fill",
+                    stylers: [{ color: "#9ca5b3" }],
+                },
+                {
+                    featureType: "road.highway",
+                    elementType: "geometry",
+                    stylers: [{ color: "#746855" }],
+                },
+                {
+                    featureType: "road.highway",
+                    elementType: "geometry.stroke",
+                    stylers: [{ color: "#1f2835" }],
+                },
+                {
+                    featureType: "road.highway",
+                    elementType: "labels.text.fill",
+                    stylers: [{ color: "#f3d19c" }],
+                },
+                {
+                    featureType: "transit",
+                    elementType: "geometry",
+                    stylers: [{ color: "#2f3948" }],
+                },
+                {
+                    featureType: "transit.station",
+                    elementType: "labels.text.fill",
+                    stylers: [{ color: "#d59563" }],
+                },
+                {
+                    featureType: "water",
+                    elementType: "geometry",
+                    stylers: [{ color: "#17263c" }],
+                },
+                {
+                    featureType: "water",
+                    elementType: "labels.text.fill",
+                    stylers: [{ color: "#515c6d" }],
+                },
+                {
+                    featureType: "water",
+                    elementType: "labels.text.stroke",
+                    stylers: [{ color: "#17263c" }],
+                },
+            ],
+        });
     
         // Create LatLngBounds object
         const bounds = new google.maps.LatLngBounds();
@@ -121,10 +203,55 @@ document.addEventListener("DOMContentLoaded", function () {
             if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
                 const center = bounds.getCenter();
                 map.setCenter(center);
-                map.setZoom(12); 
+                map.setZoom(12);
             }
         });
     }
+    
+    
+    
+        // Create LatLngBounds object
+        const bounds = new google.maps.LatLngBounds();
+    
+        // Geocode City 1
+        geocodeCity(city1, function (result1) {
+            if (result1) {
+                const marker1 = new google.maps.Marker({
+                    position: result1.geometry.location,
+                    map: map,
+                    title: city1,
+                });
+    
+                // Extend bounds to include City 1
+                bounds.extend(marker1.getPosition());
+            }
+        });
+    
+        // Geocode City 2
+        geocodeCity(city2, function (result2) {
+            if (result2) {
+                const marker2 = new google.maps.Marker({
+                    position: result2.geometry.location,
+                    map: map,
+                    title: city2,
+                });
+    
+                // Extend bounds to include City 2
+                bounds.extend(marker2.getPosition());
+            }
+    
+            // Fit the map to the bounds
+            map.fitBounds(bounds);
+    
+            // Center the map if there's only one marker
+            if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
+                const center = bounds.getCenter();
+                map.setCenter(center);
+                map.setZoom(12);
+            }
+            
+        });
+    
     
     
     
