@@ -21,7 +21,7 @@
     <div class="container">
         <div class="row">
             <div class="col s12">
-                <div id="test">
+                <div id="map-margins">
                     <div class="card-content white-text map" id="map-container" style="display: none;">
                         <!-- Google Maps will be rendered here -->
                     </div>
@@ -53,36 +53,41 @@
             </div>
         </div>
 
-        <div class="row new-section">
-            <div class="col s3 left-banner">
-                <!-- Image for the left banner (Unsplash API) -->
-                <img class="splashImage" src="https://via.placeholder.com/150" alt="City 1">
-            </div>
+        <div class="center-align" id="citiesRequest" style="display: none;">
+        <h7 class="red-text lighten-1">Please enter two cities to compare!</h7>
+        </div>
 
-            <div class="col s8 data-columns">
-                <div class="col s5 data-column white-text" id="city1Data">
-                    <!-- City 1 data will be displayed here -->
-                    <h5>City Name</h5>
-                    <p>Temp</p>
-                    <p>Humidity</p>
-                    <p>Weather</p>
+        <div id="test" style="display: none;">
+            <div class="row new-section">
+                <div class="col s3 left-banner">
+                    <!-- Image for the left banner (Unsplash API) -->
+                    <img class="splashImage" src="https://via.placeholder.com/150" alt="City 1">
                 </div>
 
-                <div class="col s5 data-column white-text" id="city2Data">
-                    <!-- City 2 data will be displayed here -->
-                    <h5>City Name</h5>
-                    <p>Temp</p>
-                    <p>Humidity</p>
-                    <p>Weather</p>
-                </div>
-            </div>
+                <div class="col s8 data-columns">
+                    <div class="col s5 data-column white-text" id="city1Data">
+                        <!-- City 1 data will be displayed here -->
+                        <h5>City Name</h5>
+                        <p>Temp</p>
+                        <p>Humidity</p>
+                        <p>Weather</p>
+                    </div>
 
-            <div class="col s3 right-banner">
-                <!-- Image for the right banner (Unsplash API) -->
-                <img class="splashImage" src="https://via.placeholder.com/150" alt="City 2">
+                    <div class="col s5 data-column white-text" id="city2Data">
+                        <!-- City 2 data will be displayed here -->
+                        <h5>City Name</h5>
+                        <p>Temp</p>
+                        <p>Humidity</p>
+                        <p>Weather</p>
+                    </div>
+                </div>
+
+                <div class="col s3 right-banner">
+                    <!-- Image for the right banner (Unsplash API) -->
+                    <img class="splashImage" src="https://via.placeholder.com/150" alt="City 2">
+                </div>
             </div>
         </div>
-    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzWZEjXyi8Y0vwCV6bI5kGD5BAazK5ia0&libraries=places&callback=initMap" async defer></script>

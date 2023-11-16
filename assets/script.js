@@ -9,9 +9,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const search1 = document.getElementById("search1").value.trim();
         const search2 = document.getElementById("search2").value.trim();
+        const citiesRequest = document.getElementById("citiesRequest");
+        citiesRequest.style.display="none";
+
+
 
         if (!search1 || !search2) {
-            alert("Please enter both cities to compare.");
+            citiesRequest.style.display="block";
             return;
         }
 
@@ -64,9 +68,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function updateMap(city1, city2) {
         const mapElement = document.getElementById("map-container");
+        const resultWrapper = document.getElementById("test");
     
         // Set the display property to block to show the map
         mapElement.style.display = "block";
+        resultWrapper.style.display = "block";
+
     
         // Clear the map container
         mapElement.innerHTML = "";
