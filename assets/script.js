@@ -63,19 +63,19 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateMap(city1, city2) {
-        const mapElement = document.querySelector(".map");
+        const mapElement = document.getElementById("map-container");
+    
+        // Set the display property to block to show the map
+        mapElement.style.display = "block";
     
         // Clear the map container
         mapElement.innerHTML = "";
     
-        // Create a new map container
-        const mapContainer = document.createElement("div");
-        mapContainer.style.height = "400px"; // Adjust the height as needed
-        mapContainer.style.width = "100%";
-        mapElement.appendChild(mapContainer);
+        // Set a specific height for the map container
+        mapElement.style.height = "300px"; 
     
-        // Initialize the map
-        map = new google.maps.Map(mapContainer);
+        // Initialize a new map
+        map = new google.maps.Map(mapElement);
     
         // Create LatLngBounds object
         const bounds = new google.maps.LatLngBounds();
