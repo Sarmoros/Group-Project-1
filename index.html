@@ -19,8 +19,8 @@
     <div class="container">
         <div class="row">
             <div class="col s12">
-                <div class="card blue lighten-2">
-                    <div class="card-content white-text map">
+                <div>
+                    <div class="card-content white-text map" id="map-container" style="display: none;">
                         <!-- Google Maps will be rendered here -->
                     </div>
                 </div>
@@ -28,7 +28,7 @@
         </div>
 
         <div class="row center-align">
-            <div class="col s12 flow-text">
+            <div class="col s12 flow-text white-text">
                 <p>Enter two cities to compare the weather</p>
             </div>
         </div>
@@ -37,7 +37,7 @@
             <div class="col s12 m8 offset-m2">
                 <form id="compareForm">
                     <div class="row">
-                        <div class="input-field col s6">
+                        <div class="input-field col s6 ">
                             <input id="search1" type="text" class="validate input-style white-text" placeholder="City 1">
                         </div>
                         <div class="input-field col s6">
@@ -58,7 +58,7 @@
             </div>
 
             <div class="col s8 data-columns">
-                <div class="col s5 data-column" id="city1Data">
+                <div class="col s5 data-column white-text" id="city1Data">
                     <!-- City 1 data will be displayed here -->
                     <p>City Name</p>
                     <p>Temp</p>
@@ -66,7 +66,7 @@
                     <p>Weather</p>
                 </div>
 
-                <div class="col s5 data-column" id="city2Data">
+                <div class="col s5 data-column white-text" id="city2Data">
                     <!-- City 2 data will be displayed here -->
                     <p>City Name</p>
                     <p>Temp</p>
