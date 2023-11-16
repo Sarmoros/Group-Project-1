@@ -7,8 +7,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" type="text/css" href="assets/style.css" />
 </head>
-<body class="#212121 grey darken-4">
+<body class="#212121 grey darken-4"> <!-- Changes background color to grey for entire site -->
     <nav>
+        <!-- Nav bar details -->
         <div class="nav-wrapper #000000 black">
             <a href="#" class="brand-logo center">
                 <img src="./assets/weather_lens_720.png" alt="Logo">
@@ -18,6 +19,7 @@
         </div>
     </nav>
 
+    <!-- Map display details -->
     <div class="container">
         <div class="row">
             <div class="col s12">
@@ -29,6 +31,7 @@
             </div>
         </div>
 
+        <!-- Form text input and button details -->
         <div class="row center-align">
             <div class="col s12 flow-text white-text">
                 <h5>Enter two cities to compare the weather</h5>
@@ -39,24 +42,26 @@
             <div class="col s12 m8 offset-m2">
                 <form id="compareForm">
                     <div class="row">
-                        <div class="input-field col s6 ">
+                        <div class="input-field col s6 "> <!-- Text-input box 1 -->
                             <input id="search1" type="text" class="validate input-style white-text" placeholder="City 1">
                         </div>
-                        <div class="input-field col s6">
+                        <div class="input-field col s6"> <!-- Text-input box 2 -->
                             <input id="search2" type="text" class="validate input-style white-text" placeholder="City 2">
                         </div>
                     </div>
-                    <div class="col s12 center-align">
+                    <div class="col s12 center-align"> <!-- Compare button details -->
                         <button class="btn waves-effect waves-light #673ab7 deep-purple" type="submit" name="action">Compare</button>
                     </div>
                 </form>
             </div>
         </div>
 
+        <!-- Text warning if text-input field is left empty or incomplete -->
         <div class="center-align" id="citiesRequest" style="display: none;">
         <h7 class="red-text lighten-1">Please enter two cities to compare!</h7>
         </div>
 
+        <!-- Results from city input -->
         <div id="test" style="display: none;">
             <div class="row new-section">
                 <div class="col s3 left-banner">
@@ -89,6 +94,7 @@
             </div>
         </div>
 
+    <!-- Javascript links -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzWZEjXyi8Y0vwCV6bI5kGD5BAazK5ia0&libraries=places&callback=initMap" async defer></script>
     <script src="assets/script.js"></script>
