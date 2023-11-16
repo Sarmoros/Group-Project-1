@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function displayCityData(element, cityName, temp, humidity, weather) {
         element.innerHTML = `
-            <p>${cityName}</p>
+            <h5>${cityName}</h5>
             <p>Temp: ${temp}°C</p>
             <p>Humidity: ${humidity}%</p>
             <p>Weather: ${weather}</p>
