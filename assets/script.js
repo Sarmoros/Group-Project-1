@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
         mapElement.innerHTML = "";
     
         // Set a specific height for the map container
-        mapElement.style.height = "300px"; 
+        mapElement.style.height = "300px"; // Adjust the height as needed
     
         // Initialize a new map
         map = new google.maps.Map(mapElement);
