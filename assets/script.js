@@ -19,20 +19,21 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // Fetch and display data for City 1 (OpenWeatherMap API)
+        // Fetches and displays data for City 1 (OpenWeatherMap API)
         fetchCityData(search1, city1Data);
 
-        // Fetch and display data for City 2 (OpenWeatherMap API)
+        // Fetches and displays data for City 2 (OpenWeatherMap API)
         fetchCityData(search2, city2Data);
 
-        // Initialize or update the map (Google Maps API)
+        // Initializes/updates the map (Google Maps API)
         updateMap(search1, search2);
 
-        // Fetch and display images for City 1 and City 2 (Unsplash API)
-        fetchUnsplashImage(search1, "left-banner");
-        fetchUnsplashImage(search2, "right-banner");
+        // Fetches and displays images for City 1 and City 2 (Unsplash API)
+        fetchUnsplashImage(search1, "left-banner"); // City 1
+        fetchUnsplashImage(search2, "right-banner"); // City 2
     });
 
+    // Fetches weather details (OpenWeatherMap API)
     function fetchCityData(city, displayElement) {
         const openWeatherMapApiKey = '4e6e807ee59834126e8fdbcfad716167';
         const openWeatherMapUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${openWeatherMapApiKey}&units=metric`;
@@ -45,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     const { temp, humidity } = main;
                     const { description } = weather[0];
 
-                    // Display city data
+                    // Displays city's weather data
                     displayCityData(displayElement, name, temp, humidity, description);
                 } else {
                     displayCityData(displayElement, "City not found", "-", "-", "-");
@@ -57,6 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
+    // Function to display user-input's cities' weather data
     function displayCityData(element, cityName, temp, humidity, weather) {
         element.innerHTML = `
             <h5>${cityName}</h5>
@@ -70,20 +72,20 @@ document.addEventListener("DOMContentLoaded", function () {
         const mapElement = document.getElementById("map-container");
         const resultWrapper = document.getElementById("test");
     
-        // Set the display property to block to show the map
+        // Sets the display property to 'block' to show the map
         mapElement.style.display = "block";
         resultWrapper.style.display = "block";
     
-        // Clear the map container
+        // Clears the map container
         mapElement.innerHTML = "";
     
-        // Set a specific height for the map container
-        mapElement.style.height = "300px"; // Adjust the height as needed
+        // Height for map container
+        mapElement.style.height = "300px";
     
-        // Initialize a new map with night mode style
+        // Style details to make the google map appear in 'dark-mode'
         map = new google.maps.Map(mapElement, {
-            center: { lat: 40.674, lng: -73.945 }, // Default center, adjust as needed
-            zoom: 12, // Default zoom, adjust as needed
+            center: { lat: 40.674, lng: -73.945 },
+            zoom: 12,
             styles: [
                 { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
                 { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
@@ -166,10 +168,9 @@ document.addEventListener("DOMContentLoaded", function () {
             ],
         });
     
-        // Create LatLngBounds object
         const bounds = new google.maps.LatLngBounds();
     
-        // Geocode City 1
+        // Geocode City 1 (the marker)
         geocodeCity(city1, function (result1) {
             if (result1) {
                 const marker1 = new google.maps.Marker({
@@ -178,12 +179,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     title: city1,
                 });
     
-                // Extend bounds to include City 1
                 bounds.extend(marker1.getPosition());
             }
         });
     
-        // Geocode City 2
+        // Geocode City 2 (the marker)
         geocodeCity(city2, function (result2) {
             if (result2) {
                 const marker2 = new google.maps.Marker({
@@ -192,14 +192,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     title: city2,
                 });
     
-                // Extend bounds to include City 2
+                // Extends bounds to include City 2
                 bounds.extend(marker2.getPosition());
             }
     
-            // Fit the map to the bounds
+            // Fits the map to the bounds
             map.fitBounds(bounds);
     
-            // Center the map if there's only one marker
+            // Centers the map if there's only one marker
             if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
                 const center = bounds.getCenter();
                 map.setCenter(center);
@@ -210,7 +210,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     
     
-        // Create LatLngBounds object
+        // Creates LatLngBounds object
         const bounds = new google.maps.LatLngBounds();
     
         // Geocode City 1
@@ -222,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     title: city1,
                 });
     
-                // Extend bounds to include City 1
+                // Extends bounds to include City 1
                 bounds.extend(marker1.getPosition());
             }
         });
@@ -236,14 +236,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     title: city2,
                 });
     
-                // Extend bounds to include City 2
+                // Extends bounds to include City 2
                 bounds.extend(marker2.getPosition());
             }
     
-            // Fit the map to the bounds
+            // Fits the map to the bounds
             map.fitBounds(bounds);
     
-            // Center the map if there's only one marker
+            // Centers the map if there's only one marker
             if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
                 const center = bounds.getCenter();
                 map.setCenter(center);
@@ -256,7 +256,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     
     
-
+    // Callback function to to find the geographical coordinates (latitude and longitude) of a city
     function geocodeCity(city, callback) {
         const geocoder = new google.maps.Geocoder();
         geocoder.geocode({ address: city }, function (results, status) {
@@ -270,6 +270,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Fetching images from unsplash api
     function fetchUnsplashImage(city, bannerClass) {
         const unsplashAccessKey = '2lV0OAt5aYO0BI3SaBX7whHE3sBxKNPAwXB1_3jdHbg';
         const unsplashUrl = `https://api.unsplash.com/photos/random?query=${city}&client_id=${unsplashAccessKey}`;
