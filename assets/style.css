@@ -8,9 +8,14 @@ p {
     font-size: large;
 }
 
+.nav-wrapper {
+    height: 70px !important;
+}
+
 img {
     width: 250px;
     height: 60px;
+    margin-top: 5px;
 }
 
 /*
