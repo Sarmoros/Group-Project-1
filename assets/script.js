@@ -4,6 +4,24 @@ document.addEventListener("DOMContentLoaded", function () {
     const city2Data = document.getElementById("city2Data");
     let map;
 
+    const storedSearch1 = localStorage.getItem("search1");
+    const storedSearch2 = localStorage.getItem("search2");
+
+    if (storedSearch1 && storedSearch2) {
+        // Fetch and display data for City 1 (OpenWeatherMap API)
+        fetchCityData(storedSearch1, city1Data);
+
+        // Fetch and display data for City 2 (OpenWeatherMap API)
+        fetchCityData(storedSearch2, city2Data);
+
+        // Initialize or update the map (Google Maps API)
+        updateMap(storedSearch1, storedSearch2);
+
+        // Fetch and display images for City 1 and City 2 (Unsplash API)
+        fetchUnsplashImage(storedSearch1, "left-banner");
+        fetchUnsplashImage(storedSearch2, "right-banner");
+    }
+    
     compareForm.addEventListener("submit", function (event) {
         event.preventDefault();
 
@@ -12,28 +30,31 @@ document.addEventListener("DOMContentLoaded", function () {
         const citiesRequest = document.getElementById("citiesRequest");
         citiesRequest.style.display="none";
 
-
+        
 
         if (!search1 || !search2) {
             citiesRequest.style.display="block";
             return;
         }
 
-        // Fetches and displays data for City 1 (OpenWeatherMap API)
+
+        localStorage.setItem("search1", search1);
+        localStorage.setItem("search2", search2);
+
+        // Fetch and display data for City 1 (OpenWeatherMap API)
         fetchCityData(search1, city1Data);
 
-        // Fetches and displays data for City 2 (OpenWeatherMap API)
+        // Fetch and display data for City 2 (OpenWeatherMap API)
         fetchCityData(search2, city2Data);
 
-        // Initializes/updates the map (Google Maps API)
+        // Initialize or update the map (Google Maps API)
         updateMap(search1, search2);
 
-        // Fetches and displays images for City 1 and City 2 (Unsplash API)
-        fetchUnsplashImage(search1, "left-banner"); // City 1
-        fetchUnsplashImage(search2, "right-banner"); // City 2
+        // Fetch and display images for City 1 and City 2 (Unsplash API)
+        fetchUnsplashImage(search1, "left-banner");
+        fetchUnsplashImage(search2, "right-banner");
     });
 
-    // Fetches weather details (OpenWeatherMap API)
     function fetchCityData(city, displayElement) {
         const openWeatherMapApiKey = '4e6e807ee59834126e8fdbcfad716167';
         const openWeatherMapUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${openWeatherMapApiKey}&units=metric`;
@@ -46,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     const { temp, humidity } = main;
                     const { description } = weather[0];
 
-                    // Displays city's weather data
+                    // Display city data
                     displayCityData(displayElement, name, temp, humidity, description);
                 } else {
                     displayCityData(displayElement, "City not found", "-", "-", "-");
@@ -58,7 +79,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
-    // Function to display user-input's cities' weather data
     function displayCityData(element, cityName, temp, humidity, weather) {
         element.innerHTML = `
             <h5>${cityName}</h5>
@@ -72,20 +92,20 @@ document.addEventListener("DOMContentLoaded", function () {
         const mapElement = document.getElementById("map-container");
         const resultWrapper = document.getElementById("test");
     
-        // Sets the display property to 'block' to show the map
+        // Set the display property to block to show the map
         mapElement.style.display = "block";
         resultWrapper.style.display = "block";
     
-        // Clears the map container
+        // Clear the map container
         mapElement.innerHTML = "";
     
-        // Height for map container
-        mapElement.style.height = "300px";
+        // Set a specific height for the map container
+        mapElement.style.height = "300px"; // Adjust the height as needed
     
-        // Style details to make the google map appear in 'dark-mode'
+        // Initialize a new map with night mode style
         map = new google.maps.Map(mapElement, {
-            center: { lat: 40.674, lng: -73.945 },
-            zoom: 12,
+            center: { lat: 40.674, lng: -73.945 }, // Default center, adjust as needed
+            zoom: 12, // Default zoom, adjust as needed
             styles: [
                 { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
                 { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
@@ -168,49 +188,7 @@ document.addEventListener("DOMContentLoaded", function () {
             ],
         });
     
-        const bounds = new google.maps.LatLngBounds();
-    
-        // Geocode City 1 (the marker)
-        geocodeCity(city1, function (result1) {
-            if (result1) {
-                const marker1 = new google.maps.Marker({
-                    position: result1.geometry.location,
-                    map: map,
-                    title: city1,
-                });
-    
-                bounds.extend(marker1.getPosition());
-            }
-        });
-    
-        // Geocode City 2 (the marker)
-        geocodeCity(city2, function (result2) {
-            if (result2) {
-                const marker2 = new google.maps.Marker({
-                    position: result2.geometry.location,
-                    map: map,
-                    title: city2,
-                });
-    
-                // Extends bounds to include City 2
-                bounds.extend(marker2.getPosition());
-            }
-    
-            // Fits the map to the bounds
-            map.fitBounds(bounds);
-    
-            // Centers the map if there's only one marker
-            if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
-                const center = bounds.getCenter();
-                map.setCenter(center);
-                map.setZoom(12);
-            }
-        });
-    }
-    
-    
-    
-        // Creates LatLngBounds object
+        // Create LatLngBounds object
         const bounds = new google.maps.LatLngBounds();
     
         // Geocode City 1
@@ -222,7 +200,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     title: city1,
                 });
     
-                // Extends bounds to include City 1
+                // Extend bounds to include City 1
                 bounds.extend(marker1.getPosition());
             }
         });
@@ -236,14 +214,58 @@ document.addEventListener("DOMContentLoaded", function () {
                     title: city2,
                 });
     
-                // Extends bounds to include City 2
+                // Extend bounds to include City 2
                 bounds.extend(marker2.getPosition());
             }
     
-            // Fits the map to the bounds
+            // Fit the map to the bounds
             map.fitBounds(bounds);
     
-            // Centers the map if there's only one marker
+            // Center the map if there's only one marker
+            if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
+                const center = bounds.getCenter();
+                map.setCenter(center);
+                map.setZoom(12);
+            }
+        });
+    }
+    
+    
+    
+        // Create LatLngBounds object
+        const bounds = new google.maps.LatLngBounds();
+    
+        // Geocode City 1
+        geocodeCity(city1, function (result1) {
+            if (result1) {
+                const marker1 = new google.maps.Marker({
+                    position: result1.geometry.location,
+                    map: map,
+                    title: city1,
+                });
+    
+                // Extend bounds to include City 1
+                bounds.extend(marker1.getPosition());
+            }
+        });
+    
+        // Geocode City 2
+        geocodeCity(city2, function (result2) {
+            if (result2) {
+                const marker2 = new google.maps.Marker({
+                    position: result2.geometry.location,
+                    map: map,
+                    title: city2,
+                });
+    
+                // Extend bounds to include City 2
+                bounds.extend(marker2.getPosition());
+            }
+    
+            // Fit the map to the bounds
+            map.fitBounds(bounds);
+    
+            // Center the map if there's only one marker
             if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
                 const center = bounds.getCenter();
                 map.setCenter(center);
@@ -256,7 +278,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     
     
-    // Callback function to to find the geographical coordinates (latitude and longitude) of a city
+
     function geocodeCity(city, callback) {
         const geocoder = new google.maps.Geocoder();
         geocoder.geocode({ address: city }, function (results, status) {
@@ -270,7 +292,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Fetching images from unsplash api
     function fetchUnsplashImage(city, bannerClass) {
         const unsplashAccessKey = '2lV0OAt5aYO0BI3SaBX7whHE3sBxKNPAwXB1_3jdHbg';
         const unsplashUrl = `https://api.unsplash.com/photos/random?query=${city}&client_id=${unsplashAccessKey}`;
