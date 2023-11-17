@@ -1,11 +1,19 @@
+
+
+
 document.addEventListener("DOMContentLoaded", function () {
     const compareForm = document.getElementById("compareForm");
     const city1Data = document.getElementById("city1Data");
     const city2Data = document.getElementById("city2Data");
-    let map;
+    initMap();
+
+
+    
 
     const storedSearch1 = localStorage.getItem("search1");
     const storedSearch2 = localStorage.getItem("search2");
+
+    
 
     if (storedSearch1 && storedSearch2) {
         // Fetch and display data for City 1 (OpenWeatherMap API)
@@ -187,6 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
             ],
         });
+
     
         // Create LatLngBounds object
         const bounds = new google.maps.LatLngBounds();
@@ -235,44 +244,6 @@ document.addEventListener("DOMContentLoaded", function () {
         // Create LatLngBounds object
         const bounds = new google.maps.LatLngBounds();
     
-        // Geocode City 1
-        geocodeCity(city1, function (result1) {
-            if (result1) {
-                const marker1 = new google.maps.Marker({
-                    position: result1.geometry.location,
-                    map: map,
-                    title: city1,
-                });
-    
-                // Extend bounds to include City 1
-                bounds.extend(marker1.getPosition());
-            }
-        });
-    
-        // Geocode City 2
-        geocodeCity(city2, function (result2) {
-            if (result2) {
-                const marker2 = new google.maps.Marker({
-                    position: result2.geometry.location,
-                    map: map,
-                    title: city2,
-                });
-    
-                // Extend bounds to include City 2
-                bounds.extend(marker2.getPosition());
-            }
-    
-            // Fit the map to the bounds
-            map.fitBounds(bounds);
-    
-            // Center the map if there's only one marker
-            if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
-                const center = bounds.getCenter();
-                map.setCenter(center);
-                map.setZoom(12);
-            }
-            
-        });
     
     
     
@@ -313,7 +284,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 bannerElement.alt = city;
             });
     }
-    
-    
-    
+
 });
+
+
+function initMap() {
+}
+
