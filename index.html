@@ -37,45 +37,38 @@
                 <h5>Enter two cities to compare the weather</h5>
             </div>
         </div>
-
-        <a class='dropdown-trigger btn' href='#' data-target='dropdown1'>Drop Me!</a>
-
-        <!-- Search history dropdown for city 1 -->
-        <ul id='dropdown1' class='dropdown-content'>
-          <li><a href="#!">one</a></li>
-          <li><a href="#!">two</a></li>
-          <li class="divider" tabindex="-1"></li>
-          <li><a href="#!">three</a></li>
-          <li><a href="#!"><i class="material-icons">view_module</i>four</a></li>
-          <li><a href="#!"><i class="material-icons">cloud</i>five</a></li>
-        </ul>
-
-        <a class='dropdown-trigger btn' href='#' data-target='dropdown1'>Drop Me!</a>
-
-        <!-- Search history dropdown for city 2 -->
-        <ul id='dropdown1' class='dropdown-content'>
-          <li><a href="#!">one</a></li>
-          <li><a href="#!">two</a></li>
-          <li class="divider" tabindex="-1"></li>
-          <li><a href="#!">three</a></li>
-          <li><a href="#!"><i class="material-icons">view_module</i>four</a></li>
-          <li><a href="#!"><i class="material-icons">cloud</i>five</a></li>
-        </ul>
-
-
+      
         <div class="row">
             <div class="col s12 m8 offset-m2">
                 <form id="compareForm">
                     <div class="row">
                         <div class="input-field col s6 "> <!-- Text-input box 1 -->
                             <input id="search1" type="text" class="validate input-style white-text" placeholder="City 1" autocomplete="off">
-                        </div>
+                        </div> 
                         <div class="input-field col s6"> <!-- Text-input box 2 -->
                             <input id="search2" type="text" class="validate input-style white-text" placeholder="City 2" autocomplete="off">
-                        </div>
+                        </div> 
                     </div>
                     <div class="col s12 center-align"> <!-- Compare button details -->
-                        <button class="btn waves-effect waves-light #673ab7 deep-purple" type="submit" name="action">Compare</button>
+                        <button class="btn waves-effect waves-light #673ab7 deep-purple dropdown-trigger btn" href="#" data-target="dropdown1" type="submit" name="action">Compare</button>
+                         <!-- Search history dropdown for city 1 -->
+                         <ul id='dropdown1' class='dropdown-content'>
+                            <li><a href="#!">One</a></li>
+                            <li><a href="#!">Two</a></li>
+                            <li class="divider" tabindex="-1"></li>
+                            <li><a href="#!">Three</a></li>
+                            <li><a href="#!"><i class="material-icons">view_module</i>Four</a></li>
+                            <li><a href="#!"><i class="material-icons">cloud</i>Five</a></li>
+                          </ul>
+                        <!-- Search history dropdown for city 2 
+                        <ul id='dropdown2' class='dropdown-content'>
+                            <li><a href="#!">Chicago</a></li>
+                            <li><a href="#!">New York City</a></li>
+                            <li class="divider" tabindex="-1"></li>
+                            <li><a href="#!">Seattle</a></li>
+                            <li><a href="#!"><i class="material-icons">view_module</i>Denver</a></li>
+                            <li><a href="#!"><i class="material-icons">cloud</i>Boston</a></li>
+                          </ul> -->
                     </div>
                 </form>
             </div>
