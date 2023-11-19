@@ -10,7 +10,7 @@ Map Integration: The tool uses the Google Maps API to display the locations of t
 
 Image Representation: Images related to each city are fetched from the Unsplash API and displayed alongside the weather data.
 
-Search History: The tool keeps track of the user's search history and displays the last 5 searches, providing a quick reference for previously compared cities.
+Search History: The tool keeps track of the user's search history and displays the last searched cities, providing a quick reference for previously compared cities.
 
 ## Technologies Used
 HTML, CSS, JavaScript: The core languages for building the front-end interface and interactivity.
@@ -26,7 +26,7 @@ Google Maps API: Integrated to visualize the geographical locations of the compa
 ## Credits
 Contributers: 
 Rodrigo Oliva 
-Catlin Mills
+Catlin Miller
 Sarahy Moros
 
 
