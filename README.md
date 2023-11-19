@@ -29,5 +29,12 @@ Rodrigo Oliva
 Catlin Miller
 Sarahy Moros
 
+## Links
+
+https://sarmoros.github.io/WeatherLens/
+
+## Screenshot
+
+![demo](./assets/weatherlensdemo.png)
 
 
