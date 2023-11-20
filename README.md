@@ -35,6 +35,9 @@ https://sarmoros.github.io/WeatherLens/
 
 ## Screenshot
 
-![demo](./assets/weatherlensdemo.png)
+![demo](./assets/images/weatherlensdemo(1).png)
+
+![demo](./assets/images/weatherlensdemo(2).png)
+
 
 
