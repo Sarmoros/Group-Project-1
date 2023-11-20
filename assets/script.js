@@ -5,7 +5,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const compareForm = document.getElementById("compareForm");
     const city1Data = document.getElementById("city1Data");
     const city2Data = document.getElementById("city2Data");
+    const recentSearches = document.getElementById("recentSearches");
+    const searchHistoryList = document.getElementById("searchHistory");
     initMap();
+
+    loadRecentSearches();
 
 
     
@@ -13,7 +17,70 @@ document.addEventListener("DOMContentLoaded", function () {
     const storedSearch1 = localStorage.getItem("search1");
     const storedSearch2 = localStorage.getItem("search2");
 
-    
+    compareForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const search1 = document.getElementById("search1").value.trim();
+        const search2 = document.getElementById("search2").value.trim();
+        const citiesRequest = document.getElementById("citiesRequest");
+        citiesRequest.style.display = "none";
+
+        if (!search1 || !search2) {
+            citiesRequest.style.display = "block";
+            return;
+        }
+
+        localStorage.setItem("search1", search1);
+        localStorage.setItem("search2", search2);
+
+        // Save the search in recent searches
+        saveRecentSearch(search1);
+        saveRecentSearch(search2);
+
+        // Fetch and display data for City 1 (OpenWeatherMap API)
+        fetchCityData(search1, city1Data);
+
+        // Fetch and display data for City 2 (OpenWeatherMap API)
+        fetchCityData(search2, city2Data);
+
+        // Initialize or update the map (Google Maps API)
+        updateMap(search1, search2);
+
+        // Fetch and display images for City 1 and City 2 (Unsplash API)
+        fetchUnsplashImage(search1, "left-banner");
+        fetchUnsplashImage(search2, "right-banner");
+
+        // Update recent searches display
+        loadRecentSearches();
+    });
+
+    function saveRecentSearch(city) {
+        let recentSearches = JSON.parse(localStorage.getItem("recentSearches")) || [];
+        if (recentSearches.length >= 5) {
+            recentSearches.pop(); // Remove the oldest search
+        }
+        recentSearches.unshift(city); // Add the new search to the beginning
+        localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
+    }
+
+    function loadRecentSearches() {
+        const recentSearches = JSON.parse(localStorage.getItem("recentSearches")) || [];
+        searchHistoryList.innerHTML = ""; // Clear the previous list
+        recentSearches.forEach(city => {
+            const listItem = document.createElement("li");
+            listItem.textContent = city;
+            listItem.addEventListener("click", function () {
+                // Handle click on a recent search
+                const storedSearch1 = localStorage.getItem("search1");
+                fetchCityData(city, city1Data);
+                fetchCityData(storedSearch1, city2Data);
+                updateMap(city, storedSearch1);
+                fetchUnsplashImage(city, "left-banner");
+                fetchUnsplashImage(storedSearch1, "right-banner");
+                loadRecentSearches(); // Refresh the list after the comparison
+            });
+            searchHistoryList.appendChild(listItem);
+        });
+    }
 
     if (storedSearch1 && storedSearch2) {
         // Fetch and display data for City 1 (OpenWeatherMap API)
