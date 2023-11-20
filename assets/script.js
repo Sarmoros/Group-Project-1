@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function updateMap(city1, city2) {
         const mapElement = document.getElementById("map-container");
-        const resultWrapper = document.getElementById("test");
+        const resultWrapper = document.getElementById("result");
     
         // Set the display property to block to show the map
         mapElement.style.display = "block";
