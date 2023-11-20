@@ -24,6 +24,17 @@ img {
     margin-top: 5px;
 }
 
+.data-columns {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    width: 100% !important;
+}
+
+#city1Data {
+    margin-left: 0px;
+}
+
 .container {
     width: 100%;
     max-width: none;
@@ -84,9 +95,21 @@ img {
     }
 }
 
-/*@media screen and (max-width:595px) {
-    .map {
-        height: 250px;
-        44
+@media screen and (max-width:993px) {
+    #city1Data {
+        width: fit-content;
     }
 }
+
+@media screen and (max-width:993px) {
+    #city2Data {
+        width: fit-content;
+    }
+}
+
+@media screen and (max-width:993px) {
+    p {
+        font-size: 16px;
+    }
+}
+
