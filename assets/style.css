@@ -1,3 +1,4 @@
+/* Defines font size for p elements*/
 p {
     font-size: 20px;
 }
@@ -14,16 +15,19 @@ p {
     margin-top: 30px;
 }
 
+/*Adds margins to the map container*/
 #map-margins {
     margin: 45px 25px 20px 25px; /* Creates a larger margin between map and navbar, and evens out the margin */
 }
 
+/*Styling for the city images*/
 img {
     width: 250px;
     height: 65px;
     margin-top: 5px;
 }
 
+/*Styling for the weather comparasion results container*/
 .data-columns {
     display: flex;
     align-items: center;
@@ -31,10 +35,12 @@ img {
     width: 100% !important;
 }
 
+/*Styling for the city 1 data*/
 #city1Data {
     margin-left: 0px;
 }
 
+/*Styling for the container class*/
 .container {
     width: 100%;
     max-width: none;
@@ -77,36 +83,34 @@ img {
     object-fit: cover;
 }
 
+ul {
+    cursor: pointer;
+    
+}
+
+/*Styling for the map parent container when page width is smaller than 595 pixels*/
 @media screen and (max-width:595px) {
     #map-margins {
         margin: 0;
     }
 }
 
+/*Hides city images when page width is smaller than 993 pixels*/
+
 @media screen and (max-width:993px) {
-    .left-banner {
+    .left-banner, .right-banner {
         display: none;
     }
 }
 
+/*Changes width of the cityData containers when page width is smaller than 993 pixels*/
 @media screen and (max-width:993px) {
-    .right-banner {
-        display: none;
-    }
-}
-
-@media screen and (max-width:993px) {
-    #city1Data {
+    #city1Data, #city2Data {
         width: fit-content;
     }
 }
 
-@media screen and (max-width:993px) {
-    #city2Data {
-        width: fit-content;
-    }
-}
-
+/*Font size for p elements when page width is smaller than 993 pixels*/
 @media screen and (max-width:993px) {
     p {
         font-size: 16px;
