@@ -1,34 +1,45 @@
 
 
-
+//Executes code when DOM is fully loaded
 document.addEventListener("DOMContentLoaded", function () {
+    // Get references to HTML elements
     const compareForm = document.getElementById("compareForm");
     const city1Data = document.getElementById("city1Data");
     const city2Data = document.getElementById("city2Data");
     const recentSearches = document.getElementById("recentSearches");
     const searchHistoryList = document.getElementById("searchHistory");
+
+    // Initialize the map
     initMap();
 
+    // Load recent searches from local storage
     loadRecentSearches();
 
 
     
-
+    // Retrieve stored search values from local storage
     const storedSearch1 = localStorage.getItem("search1");
     const storedSearch2 = localStorage.getItem("search2");
 
+    // Event listener for form submission
     compareForm.addEventListener("submit", function (event) {
         event.preventDefault();
+
+        // Retrieve user input for both cities
         const search1 = document.getElementById("search1").value.trim();
         const search2 = document.getElementById("search2").value.trim();
         const citiesRequest = document.getElementById("citiesRequest");
+
+        // Hide the cities request message
         citiesRequest.style.display = "none";
 
+        // Checks if both cities are provided
         if (!search1 || !search2) {
             citiesRequest.style.display = "block";
             return;
         }
 
+        // Store search values in local storage
         localStorage.setItem("search1", search1);
         localStorage.setItem("search2", search2);
 
@@ -53,6 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
         loadRecentSearches();
     });
 
+    // Function to save a recent search in local storage
     function saveRecentSearch(city) {
         let recentSearches = JSON.parse(localStorage.getItem("recentSearches")) || [];
         if (recentSearches.length >= 5) {
@@ -62,6 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
     }
 
+    // Function to load and display recent searches
     function loadRecentSearches() {
         const recentSearches = JSON.parse(localStorage.getItem("recentSearches")) || [];
         searchHistoryList.innerHTML = ""; // Clear the previous list
@@ -82,6 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // If there are stored search values, fetch and display data for both cities
     if (storedSearch1 && storedSearch2) {
         // Fetch and display data for City 1 (OpenWeatherMap API)
         fetchCityData(storedSearch1, city1Data);
@@ -96,48 +110,20 @@ document.addEventListener("DOMContentLoaded", function () {
         fetchUnsplashImage(storedSearch1, "left-banner");
         fetchUnsplashImage(storedSearch2, "right-banner");
     }
-    
-    compareForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        const search1 = document.getElementById("search1").value.trim();
-        const search2 = document.getElementById("search2").value.trim();
-        const citiesRequest = document.getElementById("citiesRequest");
-        citiesRequest.style.display="none";
-
-        
-
-        if (!search1 || !search2) {
-            citiesRequest.style.display="block";
-            return;
-        }
 
 
-        localStorage.setItem("search1", search1);
-        localStorage.setItem("search2", search2);
-
-        // Fetch and display data for City 1 (OpenWeatherMap API)
-        fetchCityData(search1, city1Data);
-
-        // Fetch and display data for City 2 (OpenWeatherMap API)
-        fetchCityData(search2, city2Data);
-
-        // Initialize or update the map (Google Maps API)
-        updateMap(search1, search2);
-
-        // Fetch and display images for City 1 and City 2 (Unsplash API)
-        fetchUnsplashImage(search1, "left-banner");
-        fetchUnsplashImage(search2, "right-banner");
-    });
-
+    // Function to fetch weather data for a city from the OpenWeatherMap API
     function fetchCityData(city, displayElement) {
+        // OpenWeatherMap API key and URL
         const openWeatherMapApiKey = '4e6e807ee59834126e8fdbcfad716167';
         const openWeatherMapUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${openWeatherMapApiKey}&units=metric`;
 
+        // Fetch data from the API
         fetch(openWeatherMapUrl)
             .then(response => response.json())
             .then(data => {
                 if (data.cod === 200) {
+                   // Extract specific data from the API response
                     const { name, main, weather } = data;
                     const { temp, humidity } = main;
                     const { description } = weather[0];
@@ -149,11 +135,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             })
             .catch(error => {
+                 // Display an error message in case of a fetch error
                 console.error(error);
                 displayCityData(displayElement, "Error", "-", "-", "-");
             });
     }
 
+    // Function to display weather data in the data container
     function displayCityData(element, cityName, temp, humidity, weather) {
         element.innerHTML = `
             <h4>${cityName}</h4>
@@ -163,6 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
     }
 
+    // Function to update the map using the Google Maps API
     function updateMap(city1, city2) {
         const mapElement = document.getElementById("map-container");
         const resultWrapper = document.getElementById("result");
@@ -177,10 +166,11 @@ document.addEventListener("DOMContentLoaded", function () {
         // Set a specific height for the map container
         mapElement.style.height = "300px"; // Adjust the height as needed
     
-        // Initialize a new map with night mode style
+        // Initialize a new map 
         map = new google.maps.Map(mapElement, {
-            center: { lat: 40.674, lng: -73.945 }, // Default center, adjust as needed
-            zoom: 12, // Default zoom, adjust as needed
+            center: { lat: 40.674, lng: -73.945 }, // Center the map by default 
+            zoom: 12, // Defines the default zoom
+            //Styles the map into dark mode
             styles: [
                 { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
                 { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
@@ -316,7 +306,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     
     
-
+    // Function to geocode a city using the Google Maps Geocoding API
     function geocodeCity(city, callback) {
         const geocoder = new google.maps.Geocoder();
         geocoder.geocode({ address: city }, function (results, status) {
@@ -330,10 +320,13 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Function to fetch and display an image for a city from the Unsplash API
     function fetchUnsplashImage(city, bannerClass) {
+        //Unsplash API access key and URL
         const unsplashAccessKey = '2lV0OAt5aYO0BI3SaBX7whHE3sBxKNPAwXB1_3jdHbg';
         const unsplashUrl = `https://api.unsplash.com/photos/random?query=${city}&client_id=${unsplashAccessKey}`;
     
+        // Fetch data from the Unsplash API
         fetch(unsplashUrl)
             .then(response => response.json())
             .then(imageData => {
@@ -344,6 +337,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 bannerElement.src = imageUrl;
                 bannerElement.alt = city;
             })
+
+            // Display a placeholder image in case of a fetch error
             .catch(error => {
                 console.error(error);
                 const bannerElement = document.querySelector(`.${bannerClass} .splashImage`);
@@ -354,7 +349,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-
+//Function to initialize the map
 function initMap() {
 }
 
